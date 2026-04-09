@@ -1,4 +1,5 @@
 import { AnimationContainer, MaxWidthWrapper } from "@/components";
+import StartTradingCta from "@/components/marketing/start-trading-cta";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { Button } from "@/components/ui/button";
 import { LampContainer } from "@/components/ui/lamp";
@@ -8,16 +9,19 @@ import MagicCard from "@/components/ui/magic-card";
 import ContactForm from "@/components/contact/contact-form";
 import { getBrokerCards } from "@/lib/brokers";
 import { PROCESS } from "@/utils";
-import { currentUser } from "@clerk/nextjs/server";
 import { ArrowLeftRightIcon, ArrowRightIcon, ArrowUpRightIcon, BitcoinIcon, CoinsIcon, DownloadIcon, MailIcon, MessageCircleIcon, SendIcon, WheatIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { unstable_cache } from "next/cache";
+
+const getCachedBrokerCards = unstable_cache(
+    async () => getBrokerCards(),
+    ["marketing-broker-cards"],
+    { revalidate: 300 },
+);
 
 const HomePage = async () => {
-    const clerkEnabled = /^pk_(test|live)_[A-Za-z0-9]+$/.test(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.trim() || "") &&
-        /^sk_(test|live)_[A-Za-z0-9]+$/.test(process.env.CLERK_SECRET_KEY?.trim() || "");
-    const user = clerkEnabled ? await currentUser() : null;
-    const brokerCards: Awaited<ReturnType<typeof getBrokerCards>> = await getBrokerCards();
+    const brokerCards: Awaited<ReturnType<typeof getBrokerCards>> = await getCachedBrokerCards();
     const marketItems = [
         { name: "Gold", icon: CoinsIcon },
         { name: "Crypto", icon: BitcoinIcon },
@@ -54,12 +58,7 @@ const HomePage = async () => {
                             <span className="hidden md:block">Offering Trading services on predefined strategies and agreed terms..</span>
                         </p>
                         <div className="flex items-center justify-center whitespace-nowrap gap-3 z-50">
-                            <Button size="lg" className="min-w-[210px]" asChild>
-                                <Link href={user ? "/dashboard" : "/auth/sign-in"} className="flex items-center justify-center gap-2">
-                                    Start Trading Now
-                                    <ArrowRightIcon className="w-4 h-4" />
-                                </Link>
-                            </Button>
+                            <StartTradingCta />
                             <Button
                                 variant="outline"
                                 size="lg"
@@ -89,7 +88,9 @@ const HomePage = async () => {
                                 alt="Dashboard"
                                 width={1200}
                                 height={1200}
-                                quality={100}
+                                quality={75}
+                                priority
+                                sizes="(max-width: 768px) 95vw, (max-width: 1200px) 85vw, 1200px"
                                 className="rounded-md lg:rounded-xl bg-foreground/10 ring-1 ring-border"
                             />
                             <div className="absolute -bottom-4 inset-x-0 w-full h-1/2 bg-gradient-to-t from-background z-40"></div>
