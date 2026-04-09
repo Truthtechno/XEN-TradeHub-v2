@@ -1,0 +1,33 @@
+
+> xen-tradehub@0.1.0 dev
+> next dev
+
+ ⚠ Port 3000 is in use, trying 3001 instead.
+  ▲ Next.js 14.2.13
+  - Local:        http://localhost:3001
+  - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 3.2s
+ ○ Compiling /src/middleware ...
+ ✓ Compiled /src/middleware in 712ms (182 modules)
+ ○ Compiling /api/admin/login ...
+ ✓ Compiled /api/admin/login in 759ms (64 modules)
+ POST /api/admin/login 200 in 904ms
+ ○ Compiling /admin/dashboard ...
+ ✓ Compiled /admin/dashboard in 13.5s (2056 modules)
+ GET /admin/dashboard 200 in 14755ms
+ ✓ Compiled in 1371ms (966 modules)
+ ○ Compiling /admin/analytics ...
+ ✓ Compiled /admin/analytics in 6.9s (2048 modules)
+ GET /admin/analytics 200 in 7741ms
+ ○ Compiling /admin/users ...
+ ✓ Compiled /admin/users in 3.3s (2072 modules)
+ GET /admin/users 200 in 3724ms
+ ○ Compiling /admin/enquiries ...
+ ✓ Compiled /admin/enquiries in 770ms (2078 modules)
+ GET /admin/enquiries 200 in 974ms
+ ○ Compiling /admin/brokers ...
+ ✓ Compiled /admin/brokers in 1096ms (2090 modules)
+ GET /admin/brokers 200 in 1331ms
+[?25h

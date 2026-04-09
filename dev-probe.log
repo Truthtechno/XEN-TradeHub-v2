@@ -1,0 +1,16 @@
+
+> linkify@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.13
+  - Local:        http://localhost:3000
+  - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 1336ms
+ ✓ Compiled /src/middleware in 206ms (182 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 4.2s (3788 modules)
+motion() is deprecated. Use motion.create() instead.
+ GET / 200 in 4501ms
+[?25h
