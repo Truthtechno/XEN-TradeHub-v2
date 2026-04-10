@@ -15,7 +15,7 @@ This documentation set is written for engineering, operations, and leadership st
 
 ## Homepage Hero Reference
 
-> To avoid broken links on GitHub, keep the hero screenshot in this repository at `docs/images/homepage-hero.png`.
+<!-- To avoid broken links on GitHub, keep the hero screenshot in this repository at `docs/images/homepage-hero.png`. -->
 
 ![XEN TradeHub Homepage Hero](./images/homepage-hero.png)
 
