@@ -3,10 +3,16 @@
 import { useAdminOverview } from "@/components/admin/use-admin-overview";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowDownIcon, ArrowUpIcon, ArrowUpRightIcon, PencilIcon, StarIcon, Trash2Icon, UploadIcon } from "lucide-react";
+import { ArrowDownIcon, ArrowUpIcon, ArrowUpRightIcon, MoreHorizontalIcon, PencilIcon, StarIcon, Trash2Icon, UploadIcon } from "lucide-react";
 import Image from "next/image";
 import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -157,6 +163,11 @@ const BrokersPage = () => {
         await reload();
     };
 
+    const deleteBroker = async (brokerId: string) => {
+        await fetch(`/api/admin/brokers/${brokerId}`, { method: "DELETE" });
+        await reload();
+    };
+
     const submit = async (e: React.FormEvent) => {
         e.preventDefault();
         setSaving(true);
@@ -232,8 +243,8 @@ const BrokersPage = () => {
                         </div>
                         <div className="space-y-2">
                             <Label>Logo Upload (square, under 1MB)</Label>
-                            <div className="flex items-center gap-2">
-                                <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()}>
+                            <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
+                                <Button type="button" variant="outline" className="w-full sm:w-auto" onClick={() => fileInputRef.current?.click()}>
                                     <UploadIcon className="mr-1 h-4 w-4" />
                                     Upload Logo
                                 </Button>
@@ -259,18 +270,19 @@ const BrokersPage = () => {
                             <Label>Benefits (one per line)</Label>
                             <Textarea value={form.benefits} onChange={(e) => setForm((prev) => ({ ...prev, benefits: e.target.value }))} />
                         </div>
-                        <div className="flex flex-wrap items-center gap-2 md:col-span-2">
-                            <Button type="button" variant={form.highlighted ? "default" : "outline"} onClick={() => setForm((prev) => ({ ...prev, highlighted: !prev.highlighted }))}>
+                        <div className="grid grid-cols-1 gap-2 md:col-span-2 sm:grid-cols-2 lg:grid-cols-4">
+                            <Button type="button" variant={form.highlighted ? "primary" : "outline"} className="w-full" onClick={() => setForm((prev) => ({ ...prev, highlighted: !prev.highlighted }))}>
                                 {form.highlighted ? "Priority Enabled" : "Set Priority (Gold Border)"}
                             </Button>
-                            <Button type="button" variant={form.isActive ? "default" : "outline"} onClick={() => setForm((prev) => ({ ...prev, isActive: !prev.isActive }))}>
+                            <Button type="button" variant={form.isActive ? "primary" : "outline"} className="w-full" onClick={() => setForm((prev) => ({ ...prev, isActive: !prev.isActive }))}>
                                 {form.isActive ? "Active" : "Inactive"}
                             </Button>
-                            <Button type="submit" disabled={saving}>{saving ? "Saving..." : editingBroker ? "Save Changes" : "Add Broker"}</Button>
+                            <Button type="submit" className="w-full" disabled={saving}>{saving ? "Saving..." : editingBroker ? "Save Changes" : "Add Broker"}</Button>
                             {editingBroker && (
                                 <Button
                                     type="button"
                                     variant="outline"
+                                    className="w-full"
                                     onClick={() => {
                                         setForm(emptyForm);
                                         setEditingId(null);
@@ -300,26 +312,63 @@ const BrokersPage = () => {
                                 await reorderBrokers(dragBrokerId, broker.id);
                                 setDragBrokerId(null);
                             }}
-                            className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-white/10 bg-white/[0.02] p-3"
+                            className="rounded-md border border-white/10 bg-white/[0.02] p-3"
                         >
-                            <div>
+                            <div className="min-w-0">
                                 <p className="font-medium">{broker.name}</p>
-                                <p className="text-xs text-muted-foreground">{broker.ctaUrl} - Position {index + 1} - Drag to reorder</p>
+                                <p className="text-xs text-muted-foreground break-all">
+                                    {broker.ctaUrl} - Position {index + 1} - Drag to reorder
+                                </p>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <Button variant="outline" className="h-8" disabled={index === 0} onClick={() => void moveBroker(broker.id, "up")}>
-                                    <ArrowUpIcon className="h-3.5 w-3.5" />
-                                </Button>
-                                <Button variant="outline" className="h-8" disabled={index === sortedBrokers.length - 1} onClick={() => void moveBroker(broker.id, "down")}>
-                                    <ArrowDownIcon className="h-3.5 w-3.5" />
-                                </Button>
-                                <Button variant={broker.highlighted ? "default" : "outline"} className="h-8" onClick={() => void togglePriority(broker.id, broker.highlighted)}>
+                            <div className="mt-3 flex items-center justify-between gap-2 sm:mt-2">
+                                <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
+                                    <Button variant="outline" className="h-8 w-full sm:w-auto" disabled={index === 0} onClick={() => void moveBroker(broker.id, "up")}>
+                                        <ArrowUpIcon className="h-3.5 w-3.5" />
+                                    </Button>
+                                    <Button variant="outline" className="h-8 w-full sm:w-auto" disabled={index === sortedBrokers.length - 1} onClick={() => void moveBroker(broker.id, "down")}>
+                                        <ArrowDownIcon className="h-3.5 w-3.5" />
+                                    </Button>
+                                </div>
+                                <div className="sm:hidden">
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="outline" className="h-8 w-8 p-0" aria-label="More actions">
+                                                <MoreHorizontalIcon className="h-4 w-4" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end" className="w-44">
+                                            <DropdownMenuItem onClick={() => void togglePriority(broker.id, broker.highlighted)}>
+                                                <StarIcon className="mr-2 h-3.5 w-3.5" />
+                                                {broker.highlighted ? "Remove Priority" : "Set Priority"}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => startEdit(broker)}>
+                                                <PencilIcon className="mr-2 h-3.5 w-3.5" />
+                                                Edit Broker
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                className="text-red-400 focus:text-red-300"
+                                                onClick={() => void deleteBroker(broker.id)}
+                                            >
+                                                <Trash2Icon className="mr-2 h-3.5 w-3.5" />
+                                                Delete Broker
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
+                            </div>
+
+                            <div className="mt-2 hidden sm:flex sm:flex-wrap sm:items-center sm:gap-2">
+                                <Button
+                                    variant={broker.highlighted ? "primary" : "outline"}
+                                    className="h-8 w-full sm:w-auto"
+                                    onClick={() => void togglePriority(broker.id, broker.highlighted)}
+                                >
                                     <StarIcon className="mr-1 h-3.5 w-3.5" />
                                     {broker.highlighted ? "Priority" : "Set Priority"}
                                 </Button>
                                 <Button
                                     variant="outline"
-                                    className="h-8"
+                                    className="h-8 w-full sm:w-auto"
                                     onClick={() => startEdit(broker)}
                                 >
                                     <PencilIcon className="mr-1 h-3.5 w-3.5" />
@@ -327,11 +376,8 @@ const BrokersPage = () => {
                                 </Button>
                                 <Button
                                     variant="ghost"
-                                    className="h-8 text-red-400 hover:text-red-300"
-                                    onClick={async () => {
-                                        await fetch(`/api/admin/brokers/${broker.id}`, { method: "DELETE" });
-                                        await reload();
-                                    }}
+                                    className="h-8 w-full sm:w-auto text-red-400 hover:text-red-300"
+                                    onClick={() => void deleteBroker(broker.id)}
                                 >
                                     <Trash2Icon className="h-4 w-4" />
                                 </Button>

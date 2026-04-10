@@ -11,7 +11,7 @@ const DashboardPage = () => {
 
     if (loading || !data) {
         return (
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
                 {Array.from({ length: 8 }).map((_, idx) => (
                     <Skeleton key={idx} className="h-32 rounded-xl" />
                 ))}
@@ -34,7 +34,7 @@ const DashboardPage = () => {
                 <p className="mt-1 text-sm text-muted-foreground">Welcome to your admin command center.</p>
             </section>
 
-            <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <section className="grid grid-cols-2 gap-4 xl:grid-cols-4">
                 <Card className="border-white/10 bg-black/40">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm text-muted-foreground">Total Website Visits</CardTitle>

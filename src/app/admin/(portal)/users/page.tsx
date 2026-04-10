@@ -113,7 +113,7 @@ const UsersPage = () => {
                                 </SelectContent>
                             </Select>
                             <Button
-                                variant={user.isActive ? "secondary" : "outline"}
+                                variant={user.isActive ? "subtle" : "outline"}
                                 className="h-8"
                                 onClick={async () => {
                                     await fetch(`/api/admin/users/${user.id}`, {

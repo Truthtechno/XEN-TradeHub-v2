@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { LandingVisitsTrendChart } from "@/components/admin/landing-visits-trend-chart";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -104,7 +105,6 @@ const AnalyticsPage = () => {
         );
     }
 
-    const max = Math.max(...data.landing.visitsTrend14Days.map((b) => b.count), 1);
     const cookieYes = data.landing.cookieStats.find((s) => s.cookieEnabled === true)?._count._all || 0;
     const cookieNo = data.landing.cookieStats.find((s) => s.cookieEnabled === false)?._count._all || 0;
     const cookieUnknown = data.landing.cookieStats.find((s) => s.cookieEnabled === null)?._count._all || 0;
@@ -119,7 +119,7 @@ const AnalyticsPage = () => {
                 </p>
             </section>
 
-            <div className="grid gap-4 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                 <Card className="border-white/10 bg-black/40 lg:col-span-1">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm">Landing Visits (30d)</CardTitle>
@@ -160,16 +160,8 @@ const AnalyticsPage = () => {
                     <CardTitle>Landing Visits Trend (Last 14 days)</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="grid h-64 grid-cols-14 items-end gap-2 rounded-lg border border-white/10 bg-black/30 p-4">
-                        {data.landing.visitsTrend14Days.map((bucket) => (
-                            <div key={bucket.date} className="group flex h-full flex-col justify-end">
-                                <div
-                                    className="rounded-sm bg-gradient-to-t from-yellow-500/90 to-amber-300/80 transition-all duration-300"
-                                    style={{ height: `${Math.max((bucket.count / max) * 100, 4)}%` }}
-                                    title={`${bucket.date}: ${bucket.count} visits`}
-                                />
-                            </div>
-                        ))}
+                    <div className="rounded-xl border border-white/10 bg-gradient-to-b from-black/50 to-black/80 p-2 sm:p-4">
+                        <LandingVisitsTrendChart points={data.landing.visitsTrend14Days} />
                     </div>
                     <p className="mt-3 text-xs text-muted-foreground">Tracks only the marketing landing page path (`/`).</p>
                 </CardContent>
@@ -180,14 +172,16 @@ const AnalyticsPage = () => {
                     <CardHeader>
                         <CardTitle>Landing Visit Logs</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-2">
-                        {data.landing.recentVisits.map((visit) => (
-                            <div key={visit.id} className="grid grid-cols-[1fr_0.8fr_0.8fr] gap-2 rounded-md bg-white/[0.03] px-3 py-2 text-sm">
-                                <span className="truncate text-muted-foreground">{new Date(visit.createdAt).toLocaleString()}</span>
-                                <span className="capitalize text-muted-foreground">{visit.deviceType}</span>
-                                <span className="truncate text-muted-foreground">{visit.country || "Unknown"}</span>
-                            </div>
-                        ))}
+                    <CardContent>
+                        <div className="min-h-0 max-h-[min(50vh,28rem)] space-y-2 overflow-y-auto overscroll-contain pr-1">
+                            {data.landing.recentVisits.map((visit) => (
+                                <div key={visit.id} className="grid grid-cols-[1fr_0.8fr_0.8fr] gap-2 rounded-md bg-white/[0.03] px-3 py-2 text-sm">
+                                    <span className="truncate text-muted-foreground">{new Date(visit.createdAt).toLocaleString()}</span>
+                                    <span className="capitalize text-muted-foreground">{visit.deviceType}</span>
+                                    <span className="truncate text-muted-foreground">{visit.country || "Unknown"}</span>
+                                </div>
+                            ))}
+                        </div>
                     </CardContent>
                 </Card>
 

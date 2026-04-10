@@ -1,5 +1,5 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 
 const hasValidClerkKeys = () => {
     const publishable = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.trim() || "";
@@ -24,7 +24,7 @@ const authMiddleware = clerkMiddleware((auth, req) => {
     }
 });
 
-export default function middleware(req: Request) {
+export default function middleware(req: NextRequest, event: NextFetchEvent) {
     if (!hasValidClerkKeys()) {
         const url = new URL(req.url).pathname;
 
@@ -35,7 +35,7 @@ export default function middleware(req: Request) {
         return NextResponse.next();
     }
 
-    return authMiddleware(req as any);
+    return authMiddleware(req, event);
 }
 
 export const config = {

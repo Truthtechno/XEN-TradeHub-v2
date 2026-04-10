@@ -33,7 +33,7 @@ const HomePage = async () => {
     return (
         <div id="home" className="overflow-x-hidden scrollbar-hide size-full">
             {/* Hero Section */}
-            <MaxWidthWrapper>
+            <MaxWidthWrapper className="px-6 md:px-12 lg:px-20">
                 <div className="flex flex-col items-center justify-center w-full text-center bg-gradient-to-t from-background">
                     <AnimationContainer className="flex flex-col items-center justify-center w-full text-center">
                         <button className="group relative grid overflow-hidden rounded-full px-4 py-1 shadow-[0_1000px_0_0_hsl(0_0%_20%)_inset] transition-colors duration-200">
@@ -57,12 +57,12 @@ const HomePage = async () => {
                             <br className="hidden md:block" />
                             <span className="hidden md:block">Offering Trading services on predefined strategies and agreed terms..</span>
                         </p>
-                        <div className="flex items-center justify-center whitespace-nowrap gap-3 z-50">
+                        <div className="z-50 flex w-full max-w-full flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center sm:whitespace-nowrap">
                             <StartTradingCta />
                             <Button
                                 variant="outline"
                                 size="lg"
-                                className="min-w-[210px] border-white/20 bg-white/[0.03] text-white hover:bg-white/10"
+                                className="w-full min-w-0 border-white/20 bg-white/[0.03] text-white hover:bg-white/10 sm:w-auto sm:min-w-[210px]"
                                 asChild
                             >
                                 <a href="/assets/smart-trading-flyer.pdf" download className="flex items-center justify-center gap-2">
@@ -178,7 +178,7 @@ const HomePage = async () => {
 
             {/* Pricing Section */}
             <section id="trade-with-us">
-                <MaxWidthWrapper className="py-10">
+                <MaxWidthWrapper className="py-10 max-md:pb-6 md:py-10">
                 <AnimationContainer delay={0.1}>
                     <div className="flex flex-col items-center lg:items-center justify-center w-full py-8 max-w-xl mx-auto">
                         <MagicBadge title="Trade With Us" />
@@ -262,9 +262,9 @@ const HomePage = async () => {
 
             {/* Contact Showcase Section */}
             <section id="contact">
-                <MaxWidthWrapper className="py-10">
+                <MaxWidthWrapper className="py-10 max-md:py-6 md:py-10">
                 <AnimationContainer delay={0.1}>
-                    <div className="flex flex-col items-center lg:items-center justify-center w-full py-8 max-w-xl mx-auto">
+                    <div className="mx-auto flex w-full max-w-xl flex-col items-center justify-center py-8 text-center max-md:py-4 md:py-8 lg:items-center">
                         <MagicBadge title="Get In Touch" />
                         <h2 className="text-center lg:text-center text-3xl md:text-5xl !leading-[1.1] font-medium font-heading text-foreground mt-6">
                             Need help or have questions?
@@ -274,7 +274,7 @@ const HomePage = async () => {
                         </p>
                     </div>
                 </AnimationContainer>
-                <AnimationContainer delay={0.2} className="w-full py-8">
+                <AnimationContainer delay={0.2} className="w-full py-8 max-md:py-4 md:py-8">
                     <div className="-m-2 rounded-xl p-2 lg:-m-4 lg:rounded-2xl">
                         <div className="rounded-md lg:rounded-xl bg-black p-4 md:p-5">
                             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-5">
@@ -341,11 +341,11 @@ const HomePage = async () => {
             </section>
 
             {/* CTA Section */}
-            <MaxWidthWrapper className="mt-20 max-w-[100vw] overflow-x-hidden scrollbar-hide">
+            <MaxWidthWrapper className="mt-8 max-w-[100vw] overflow-x-hidden scrollbar-hide md:mt-20">
                 <AnimationContainer delay={0.1}>
-                    <LampContainer className="[&>div:last-child]:-translate-y-40 md:[&>div:last-child]:-translate-y-56 xl:[&>div:last-child]:-translate-y-64">
-                        <div className="flex flex-col items-center justify-center relative w-full text-center">
-                            <h2 className="bg-gradient-to-b from-neutral-200 to-neutral-400 py-4 bg-clip-text text-center text-4xl md:text-7xl !leading-[1.15] font-medium font-heading tracking-tight text-transparent mt-8">
+                    <LampContainer>
+                        <div className="relative flex w-full max-w-full flex-col items-center justify-center text-center max-md:pt-16 max-md:pb-12 md:py-0">
+                            <h2 className="bg-gradient-to-b from-neutral-200 to-neutral-400 py-4 bg-clip-text text-center text-4xl md:text-7xl !leading-[1.15] font-medium font-heading tracking-tight text-transparent mt-0 md:mt-8">
                                 Start Making Your Money 
                                 <br />Work For You Today! <span className="text-transparent bg-gradient-to-r from-yellow-300 via-amber-400 to-orange-500 bg-clip-text inline-block"></span>
                             </h2>
