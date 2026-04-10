@@ -49,7 +49,7 @@ const AdminShell = ({ children }: { children: ReactNode }) => {
             <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-white/10 bg-black/95 px-4 backdrop-blur-md lg:hidden">
                 <Link href="/admin/dashboard" className="flex min-w-0 items-center gap-2" onClick={() => setMobileNavOpen(false)}>
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg p-1.5">
-                        <Image src="/icons/logo.svg" alt="" width={28} height={28} priority />
+                        <Image src="/favicon.png" alt="" width={28} height={28} priority />
                     </div>
                     <div className="min-w-0">
                         <p className="truncate text-sm font-semibold leading-tight">XEN TradeHub</p>
@@ -74,7 +74,7 @@ const AdminShell = ({ children }: { children: ReactNode }) => {
                                 onClick={() => setMobileNavOpen(false)}
                             >
                                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl p-2">
-                                    <Image src="/icons/logo.svg" alt="XEN TradeHub logo" width={36} height={36} priority />
+                                    <Image src="/favicon.png" alt="XEN TradeHub logo" width={36} height={36} priority />
                                 </div>
                                 <div>
                                     <p className="text-sm font-semibold">XEN TradeHub</p>
@@ -94,7 +94,7 @@ const AdminShell = ({ children }: { children: ReactNode }) => {
                                             className={cn(
                                                 "flex items-center gap-2 rounded-md px-3 py-2.5 text-sm text-muted-foreground transition-colors",
                                                 active
-                                                    ? "border border-yellow-500/30 bg-yellow-500/10 text-yellow-100"
+                                                    ? "border border-zinc-600/70 bg-zinc-900 font-medium text-yellow-400"
                                                     : "hover:bg-white/[0.03] hover:text-foreground",
                                             )}
                                         >
@@ -124,7 +124,7 @@ const AdminShell = ({ children }: { children: ReactNode }) => {
                 <aside className="hidden flex-col border-r border-white/10 bg-black px-3 py-4 lg:flex">
                     <Link href="/admin/dashboard" className="mb-6 flex items-center gap-2 rounded-lg px-3 py-2">
                         <div className="flex h-14 w-14 items-center justify-center rounded-xl p-2">
-                            <Image src="/icons/logo.svg" alt="XEN TradeHub logo" width={36} height={36} priority />
+                            <Image src="/favicon.png" alt="XEN TradeHub logo" width={36} height={36} priority />
                         </div>
                         <div>
                             <p className="text-sm font-semibold">XEN TradeHub</p>
@@ -143,7 +143,7 @@ const AdminShell = ({ children }: { children: ReactNode }) => {
                                     className={cn(
                                         "flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors",
                                         active
-                                            ? "border border-yellow-500/30 bg-yellow-500/10 text-yellow-100"
+                                            ? "border border-zinc-600/70 bg-zinc-900 font-medium text-yellow-400"
                                             : "hover:bg-white/[0.03] hover:text-foreground",
                                     )}
                                 >
