@@ -36,4 +36,4 @@ For full setup, environment standards, and deployment readiness, use the documen
 
 ## License
 
-This project is licensed under the MIT License. See `LICENSE` for details.
+Licensing for this project is under review. All rights are reserved until a formal license is published by the team.
