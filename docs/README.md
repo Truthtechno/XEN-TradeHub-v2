@@ -1,43 +1,41 @@
 # XEN TradeHub Documentation
 
-XEN TradeHub is an independent asset management service provider delivering structured trading services built on predefined strategies and agreed operational terms.
+XEN TradeHub is an independent asset management service provider focused on structured trading support, transparent execution oversight, and disciplined market participation.
 
-This documentation hub is designed for internal engineering, operations, and deployment teams.
+This documentation set is written for engineering, operations, and leadership stakeholders.
 
-## Brand Snapshot
+## At A Glance
 
-- **Core positioning:** Trade smarter with structured support.
-- **Primary markets:** Gold, Crypto, Forex, Commodities.
-- **Operating model:** Client retains control of their broker account; strategy support and execution guidance are provided by XEN TradeHub.
-- **Platform areas:** Marketing website, admin portal, enquiries pipeline, analytics dashboards.
+| Area | Summary |
+| --- | --- |
+| Positioning | Trade Smarter with Smart Trading |
+| Core Markets | Gold, Crypto, Forex, Commodities |
+| Delivery Model | Client-owned broker accounts with strategy-led support |
+| Platform Scope | Marketing website, admin portal, enquiries operations, analytics |
 
-## Homepage Visual Reference
+## Homepage Hero Reference
 
-The homepage hero used across product and brand communications:
+> To avoid broken links on GitHub, keep the hero screenshot in this repository at `docs/images/homepage-hero.png`.
 
-![XEN TradeHub Homepage Hero](../assets/Screenshot_2026-04-10_at_6.22.26_AM-1f134938-e6b4-47a2-9841-71265f4674bf.png)
+![XEN TradeHub Homepage Hero](./images/homepage-hero.png)
 
-Backup local reference:
-
-![XEN TradeHub Homepage Hero (Attached)](/Users/brianamooti/.cursor/projects/Users-brianamooti-BRYAN-PROJECTS-linkify-main/assets/Screenshot_2026-04-10_at_6.22.26_AM-1f134938-e6b4-47a2-9841-71265f4674bf.png)
-
-> If your environment does not resolve either path, copy the screenshot into `docs/images/homepage-hero.png` and update the first image path accordingly.
+If you do not yet have the file in this path, add the attached screenshot from your local machine and commit it.
 
 ## Documentation Index
 
 - [Development Guide](./DEVELOPMENT.md)
 - [Production Operations Guide](./PRODUCTION.md)
 
-## Technology Footprint
+## Technology Profile
 
 - Next.js 14 (App Router)
 - TypeScript + React 18
 - Tailwind CSS + shadcn/ui
 - Prisma ORM
 - Clerk authentication
-- API routes for admin and marketing workflows
+- API-driven admin operations
 
-## Governance Notes
+## Operational Guidance
 
-- Admin experiences are built for operational scalability (enquiries triage, broker ordering, user governance).
-- Documentation and process updates should be reviewed when APIs, middleware, or auth policies change.
+- Admin workflows are designed for scale (high-volume enquiries, broker ordering, role governance).
+- Update documentation when changing API contracts, middleware behavior, or environment configuration.

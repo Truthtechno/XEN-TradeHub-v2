@@ -1,5 +1,7 @@
 # Production Operations Guide
 
+![Homepage Hero](./images/homepage-hero.png)
+
 ## Objective
 
 Provide a corporate-grade deployment and runtime checklist for XEN TradeHub production environments.
@@ -38,6 +40,14 @@ DATABASE_URL=
    - Deploy with immutable environment config.
 4. **Smoke tests**
    - Confirm route availability for `/`, `/admin/login`, `/admin/enquiries`, `/admin/brokers`.
+
+## Deployment Principle
+
+Treat every deployment as a controlled release:
+
+- immutable artifacts,
+- auditable environment configuration,
+- monitored post-release behavior.
 
 ## Security & Access Controls
 

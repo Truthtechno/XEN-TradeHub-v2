@@ -1,5 +1,7 @@
 # Development Guide
 
+![Homepage Hero](./images/homepage-hero.png)
+
 ## Purpose
 
 This guide standardizes local development for XEN TradeHub to ensure consistency across engineering environments and reduce onboarding friction.
@@ -49,6 +51,14 @@ This validates:
 - TypeScript correctness
 - Next.js route compilation
 - production bundling viability
+
+## Quality Gate (Recommended)
+
+```bash
+npm run build
+```
+
+For release-bound changes, do not merge without a passing production build.
 
 ## Core Application Areas
 
