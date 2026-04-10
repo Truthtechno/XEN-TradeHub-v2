@@ -27,6 +27,17 @@ export const TextHoverEffect = ({
         }
     }, [cursor]);
 
+    const handlePointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
+        if (!e.isPrimary) return;
+        setCursor({ x: e.clientX, y: e.clientY });
+    };
+
+    const handlePointerDown = (e: React.PointerEvent<SVGSVGElement>) => {
+        if (!e.isPrimary) return;
+        setHovered(true);
+        setCursor({ x: e.clientX, y: e.clientY });
+    };
+
     return (
         <svg
             ref={svgRef}
@@ -34,10 +45,11 @@ export const TextHoverEffect = ({
             height="100%"
             viewBox="0 0 300 100"
             xmlns="http://www.w3.org/2000/svg"
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
-            onMouseMove={(e) => setCursor({ x: e.clientX, y: e.clientY })}
-            className="select-none"
+            onPointerEnter={() => setHovered(true)}
+            onPointerLeave={() => setHovered(false)}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            className="select-none touch-none"
         >
             <defs>
                 <linearGradient
