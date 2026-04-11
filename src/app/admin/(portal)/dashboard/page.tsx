@@ -1,21 +1,46 @@
 "use client";
 
+import { useAdminOverview } from "@/components/admin/use-admin-overview";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { GlobeIcon, MailIcon, ShieldCheckIcon, Users2Icon } from "lucide-react";
-import { useAdminOverview } from "@/components/admin/use-admin-overview";
+import Link from "next/link";
 
 const DashboardPage = () => {
-    const { data, loading } = useAdminOverview();
+    const { data, loading, error, reload } = useAdminOverview();
 
-    if (loading || !data) {
+    if (loading && !data) {
         return (
             <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
                 {Array.from({ length: 8 }).map((_, idx) => (
                     <Skeleton key={idx} className="h-32 rounded-xl" />
                 ))}
             </div>
+        );
+    }
+
+    if (!data) {
+        return (
+            <Card className="border-red-500/40 bg-black/40">
+                <CardHeader>
+                    <CardTitle>Unable to load dashboard</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                    <p className="text-sm text-muted-foreground">{error || "Please try again in a moment."}</p>
+                    <p className="text-xs text-muted-foreground">
+                        If this persists after signing in, run database migrations:{" "}
+                        <code className="rounded bg-muted px-1 py-0.5">npx prisma migrate deploy</code>
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                        <Button onClick={() => void reload()}>Retry</Button>
+                        <Button variant="outline" asChild>
+                            <Link href="/admin/login">Sign in again</Link>
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
         );
     }
 

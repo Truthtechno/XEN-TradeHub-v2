@@ -8,6 +8,11 @@ const SESSION_TTL_MS = 7 * ONE_DAY_MS;
 type SessionPayload = {
     email: string;
     exp: number;
+    /** PortalRole string, or legacy bootstrap admin. */
+    role: string;
+    portalUserId?: string;
+    /** Portal users only: must complete /admin/change-password before using the app. */
+    mustChangePassword?: boolean;
 };
 
 const base64url = (value: string) => Buffer.from(value).toString("base64url");
@@ -18,10 +23,20 @@ const getSecret = () => process.env.ADMIN_SESSION_SECRET || "change-this-admin-s
 const sign = (payload: string) =>
     crypto.createHmac("sha256", getSecret()).update(payload).digest("base64url");
 
-export const createAdminSessionToken = (email: string) => {
+export const createAdminSessionToken = (
+    email: string,
+    opts?: { role?: string; portalUserId?: string; mustChangePassword?: boolean },
+) => {
     const payload: SessionPayload = {
         email,
         exp: Date.now() + SESSION_TTL_MS,
+        role: opts?.role ?? "ADMIN",
+        ...(opts?.portalUserId
+            ? {
+                  portalUserId: opts.portalUserId,
+                  mustChangePassword: Boolean(opts.mustChangePassword),
+              }
+            : {}),
     };
 
     const encoded = base64url(JSON.stringify(payload));
@@ -40,6 +55,7 @@ export const verifyAdminSessionToken = (token?: string | null): SessionPayload |
     try {
         const payload = JSON.parse(parseBase64url(encoded)) as SessionPayload;
         if (!payload.exp || payload.exp < Date.now()) return null;
+        if (!payload.role) payload.role = "ADMIN";
         return payload;
     } catch {
         return null;

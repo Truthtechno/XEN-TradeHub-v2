@@ -25,6 +25,8 @@ export type AdminOverview = {
         isActive: boolean;
         createdAt: string;
         updatedAt: string;
+        hasPassword: boolean;
+        mustChangePassword: boolean;
     }[];
     brokers: {
         id: string;

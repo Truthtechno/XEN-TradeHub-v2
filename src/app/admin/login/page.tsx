@@ -24,13 +24,20 @@ const AdminLoginPage = () => {
                 body: JSON.stringify({ email, password }),
             });
 
+            const payload = (await res.json().catch(() => ({}))) as { error?: string; mustChangePassword?: boolean };
+
             if (!res.ok) {
-                toast.error("Invalid email or password.");
+                toast.error(payload.error || "Invalid email or password.");
                 return;
             }
 
-            toast.success("Signed in successfully.");
-            router.push("/admin/dashboard");
+            if (payload.mustChangePassword) {
+                toast.success("Signed in. Choose a permanent password to continue.");
+                router.push("/admin/change-password");
+            } else {
+                toast.success("Signed in successfully.");
+                router.push("/admin/dashboard");
+            }
             router.refresh();
         } catch {
             toast.error("Unable to sign in right now.");
@@ -45,7 +52,8 @@ const AdminLoginPage = () => {
                 <div className="mb-6">
                     <h1 className="text-3xl font-semibold tracking-tight">Sign in</h1>
                     <p className="mt-2 text-sm text-muted-foreground">
-                        Continue to your dashboard.
+                        Portal users sign in with the email and temporary password from an admin, then set a permanent password. The
+                        bootstrap admin account uses credentials from your server environment.
                     </p>
                 </div>
 

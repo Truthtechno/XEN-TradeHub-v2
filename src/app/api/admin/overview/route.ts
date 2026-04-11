@@ -1,6 +1,7 @@
 import { ensureAdmin } from "@/lib/admin-route";
 import { seedDefaultBrokersIfEmpty } from "@/lib/brokers";
 import { db } from "@/lib/prisma";
+import { toPublicPortalUser } from "@/lib/portal-user-public";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -41,11 +42,17 @@ export async function GET() {
             deviceStats,
             countryStats,
             enquiries,
-            users,
+            users: users.map(toPublicPortalUser),
             brokers,
             recentVisits,
         });
-    } catch {
-        return NextResponse.json({ error: "Database unavailable. Please try again." }, { status: 503 });
+    } catch (e) {
+        console.error("[api/admin/overview] Prisma error:", e);
+        const devHint =
+            process.env.NODE_ENV === "development" && e instanceof Error ? ` ${e.message}` : "";
+        return NextResponse.json(
+            { error: `Database unavailable. Please try again.${devHint ? ` —${devHint}` : ""}` },
+            { status: 503 },
+        );
     }
 }

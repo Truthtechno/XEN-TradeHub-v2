@@ -3,6 +3,7 @@
 import { useAdminOverview } from "@/components/admin/use-admin-overview";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -12,9 +13,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowDownIcon, ArrowUpIcon, ArrowUpRightIcon, MoreHorizontalIcon, PencilIcon, StarIcon, Trash2Icon, UploadIcon } from "lucide-react";
+import { cn } from "@/utils";
+import { ArrowDownIcon, ArrowUpIcon, ArrowUpRightIcon, ChevronDownIcon, MoreHorizontalIcon, PencilIcon, StarIcon, Trash2Icon, UploadIcon } from "lucide-react";
 import Image from "next/image";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 const emptyForm = {
@@ -35,6 +37,9 @@ const BrokersPage = () => {
     const [saving, setSaving] = useState(false);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [dragBrokerId, setDragBrokerId] = useState<string | null>(null);
+    const [addSectionOpen, setAddSectionOpen] = useState(false);
+    const [directoryOpen, setDirectoryOpen] = useState(true);
+    const [previewOpen, setPreviewOpen] = useState(false);
 
     const editingBroker = useMemo(
         () => data?.brokers.find((broker) => broker.id === editingId) || null,
@@ -45,6 +50,10 @@ const BrokersPage = () => {
         () => [...(data?.brokers || [])].sort((a, b) => a.orderIndex - b.orderIndex),
         [data?.brokers],
     );
+
+    useEffect(() => {
+        if (editingId) setAddSectionOpen(true);
+    }, [editingId]);
 
     const toDataUrl = (file: File) =>
         new Promise<string>((resolve, reject) => {
@@ -232,10 +241,33 @@ const BrokersPage = () => {
             </section>
 
             <Card className="border-white/10 bg-black/40">
-                <CardHeader>
-                    <CardTitle>{editingBroker ? `Edit Broker: ${editingBroker.name}` : "Add New Broker"}</CardTitle>
-                </CardHeader>
-                <CardContent>
+                <Collapsible open={addSectionOpen} onOpenChange={setAddSectionOpen}>
+                    <CollapsibleTrigger asChild>
+                        <button
+                            type="button"
+                            className="w-full rounded-t-lg text-left outline-none transition-colors hover:bg-white/[0.02] focus-visible:ring-2 focus-visible:ring-yellow-500/40"
+                        >
+                            <CardHeader className="flex flex-row items-center gap-3 space-y-0 pb-4">
+                                <div className="min-w-0 flex-1 space-y-1">
+                                    <CardTitle className="text-xl">
+                                        {editingBroker ? `Edit Broker: ${editingBroker.name}` : "Add New Broker"}
+                                    </CardTitle>
+                                    <p className="text-sm font-normal text-muted-foreground">
+                                        {editingBroker ? "Update details below, then save." : "Create a new homepage card — expand to use the form."}
+                                    </p>
+                                </div>
+                                <ChevronDownIcon
+                                    className={cn(
+                                        "h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-200",
+                                        addSectionOpen && "rotate-180",
+                                    )}
+                                    aria-hidden
+                                />
+                            </CardHeader>
+                        </button>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                <CardContent className="pt-0">
                     <form onSubmit={submit} className="grid gap-3 md:grid-cols-2">
                         <div className="space-y-2">
                             <Label>Broker Name</Label>
@@ -294,13 +326,36 @@ const BrokersPage = () => {
                         </div>
                     </form>
                 </CardContent>
+                    </CollapsibleContent>
+                </Collapsible>
             </Card>
 
             <Card className="border-white/10 bg-black/40">
-                <CardHeader>
-                    <CardTitle>Broker Directory (Edit, Order, Priority)</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
+                <Collapsible open={directoryOpen} onOpenChange={setDirectoryOpen}>
+                    <CollapsibleTrigger asChild>
+                        <button
+                            type="button"
+                            className="w-full rounded-t-lg text-left outline-none transition-colors hover:bg-white/[0.02] focus-visible:ring-2 focus-visible:ring-yellow-500/40"
+                        >
+                            <CardHeader className="flex flex-row items-center gap-3 space-y-0 pb-3">
+                                <div className="min-w-0 flex-1 space-y-1">
+                                    <CardTitle className="text-xl">Broker Directory (Edit, Order, Priority)</CardTitle>
+                                    <p className="text-sm font-normal text-muted-foreground">
+                                        Drag a row to reorder. Use arrows for fine adjustments.
+                                    </p>
+                                </div>
+                                <ChevronDownIcon
+                                    className={cn(
+                                        "h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-200",
+                                        directoryOpen && "rotate-180",
+                                    )}
+                                    aria-hidden
+                                />
+                            </CardHeader>
+                        </button>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                <CardContent className="space-y-1.5 px-4 pb-4 pt-0 sm:px-6">
                     {sortedBrokers.map((broker, index) => (
                         <div
                             key={broker.id}
@@ -312,71 +367,118 @@ const BrokersPage = () => {
                                 await reorderBrokers(dragBrokerId, broker.id);
                                 setDragBrokerId(null);
                             }}
-                            className="rounded-md border border-white/10 bg-white/[0.02] p-3"
+                            className="flex flex-col gap-2 rounded-lg border border-white/10 bg-white/[0.02] px-3 py-2.5 transition-colors hover:border-white/15 sm:flex-row sm:items-center sm:gap-3 sm:py-2 cursor-grab active:cursor-grabbing"
                         >
-                            <div className="min-w-0">
-                                <p className="font-medium">{broker.name}</p>
-                                <p className="text-xs text-muted-foreground break-all">
-                                    {broker.ctaUrl} - Position {index + 1} - Drag to reorder
+                            <div className="min-w-0 flex-1">
+                                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                                    <p className="font-medium leading-tight">{broker.name}</p>
+                                    <span className="text-[11px] tabular-nums text-muted-foreground">#{index + 1}</span>
+                                    {broker.highlighted ? (
+                                        <span className="rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-200">
+                                            Priority
+                                        </span>
+                                    ) : null}
+                                </div>
+                                <p className="mt-0.5 truncate text-xs text-muted-foreground" title={broker.ctaUrl}>
+                                    {broker.ctaUrl}
                                 </p>
                             </div>
-                            <div className="mt-3 flex items-center justify-between gap-2 sm:mt-2">
-                                <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
-                                    <Button variant="outline" className="h-8 w-full sm:w-auto" disabled={index === 0} onClick={() => void moveBroker(broker.id, "up")}>
+
+                            {/* Narrow screens: overflow menu + compact order controls */}
+                            <div className="flex items-center justify-between gap-2 sm:hidden">
+                                <div className="flex gap-1.5">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="icon"
+                                        className="h-8 w-8 shrink-0"
+                                        disabled={index === 0}
+                                        aria-label="Move up"
+                                        onClick={() => void moveBroker(broker.id, "up")}
+                                    >
                                         <ArrowUpIcon className="h-3.5 w-3.5" />
                                     </Button>
-                                    <Button variant="outline" className="h-8 w-full sm:w-auto" disabled={index === sortedBrokers.length - 1} onClick={() => void moveBroker(broker.id, "down")}>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="icon"
+                                        className="h-8 w-8 shrink-0"
+                                        disabled={index === sortedBrokers.length - 1}
+                                        aria-label="Move down"
+                                        onClick={() => void moveBroker(broker.id, "down")}
+                                    >
                                         <ArrowDownIcon className="h-3.5 w-3.5" />
                                     </Button>
                                 </div>
-                                <div className="sm:hidden">
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="outline" className="h-8 w-8 p-0" aria-label="More actions">
-                                                <MoreHorizontalIcon className="h-4 w-4" />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end" className="w-44">
-                                            <DropdownMenuItem onClick={() => void togglePriority(broker.id, broker.highlighted)}>
-                                                <StarIcon className="mr-2 h-3.5 w-3.5" />
-                                                {broker.highlighted ? "Remove Priority" : "Set Priority"}
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => startEdit(broker)}>
-                                                <PencilIcon className="mr-2 h-3.5 w-3.5" />
-                                                Edit Broker
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem
-                                                className="text-red-400 focus:text-red-300"
-                                                onClick={() => void deleteBroker(broker.id)}
-                                            >
-                                                <Trash2Icon className="mr-2 h-3.5 w-3.5" />
-                                                Delete Broker
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </div>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button type="button" variant="outline" className="h-8 w-8 shrink-0 p-0" aria-label="More actions">
+                                            <MoreHorizontalIcon className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end" className="w-44">
+                                        <DropdownMenuItem onClick={() => void togglePriority(broker.id, broker.highlighted)}>
+                                            <StarIcon className="mr-2 h-3.5 w-3.5" />
+                                            {broker.highlighted ? "Remove priority" : "Set priority"}
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => startEdit(broker)}>
+                                            <PencilIcon className="mr-2 h-3.5 w-3.5" />
+                                            Edit broker
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            className="text-red-400 focus:text-red-300"
+                                            onClick={() => void deleteBroker(broker.id)}
+                                        >
+                                            <Trash2Icon className="mr-2 h-3.5 w-3.5" />
+                                            Delete
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                             </div>
 
-                            <div className="mt-2 hidden sm:flex sm:flex-wrap sm:items-center sm:gap-2">
+                            {/* sm+: single compact toolbar */}
+                            <div className="hidden shrink-0 flex-wrap items-center justify-end gap-1.5 sm:flex">
                                 <Button
-                                    variant={broker.highlighted ? "primary" : "outline"}
-                                    className="h-8 w-full sm:w-auto"
-                                    onClick={() => void togglePriority(broker.id, broker.highlighted)}
+                                    type="button"
+                                    variant="outline"
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    disabled={index === 0}
+                                    aria-label="Move up"
+                                    onClick={() => void moveBroker(broker.id, "up")}
                                 >
-                                    <StarIcon className="mr-1 h-3.5 w-3.5" />
-                                    {broker.highlighted ? "Priority" : "Set Priority"}
+                                    <ArrowUpIcon className="h-3.5 w-3.5" />
                                 </Button>
                                 <Button
+                                    type="button"
                                     variant="outline"
-                                    className="h-8 w-full sm:w-auto"
-                                    onClick={() => startEdit(broker)}
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    disabled={index === sortedBrokers.length - 1}
+                                    aria-label="Move down"
+                                    onClick={() => void moveBroker(broker.id, "down")}
                                 >
-                                    <PencilIcon className="mr-1 h-3.5 w-3.5" />
+                                    <ArrowDownIcon className="h-3.5 w-3.5" />
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant={broker.highlighted ? "primary" : "outline"}
+                                    className="h-8 gap-1 px-2.5 text-xs"
+                                    onClick={() => void togglePriority(broker.id, broker.highlighted)}
+                                >
+                                    <StarIcon className="h-3.5 w-3.5" />
+                                    {broker.highlighted ? "Priority" : "Set priority"}
+                                </Button>
+                                <Button type="button" variant="outline" className="h-8 gap-1 px-2.5 text-xs" onClick={() => startEdit(broker)}>
+                                    <PencilIcon className="h-3.5 w-3.5" />
                                     Edit
                                 </Button>
                                 <Button
+                                    type="button"
                                     variant="ghost"
-                                    className="h-8 w-full sm:w-auto text-red-400 hover:text-red-300"
+                                    size="icon"
+                                    className="h-8 w-8 text-red-400 hover:bg-red-500/10 hover:text-red-300"
+                                    aria-label="Delete broker"
                                     onClick={() => void deleteBroker(broker.id)}
                                 >
                                     <Trash2Icon className="h-4 w-4" />
@@ -385,13 +487,36 @@ const BrokersPage = () => {
                         </div>
                     ))}
                 </CardContent>
+                    </CollapsibleContent>
+                </Collapsible>
             </Card>
 
             <Card className="border-white/10 bg-black/40">
-                <CardHeader>
-                    <CardTitle>Homepage Preview (Live Broker Cards)</CardTitle>
-                </CardHeader>
-                <CardContent>
+                <Collapsible open={previewOpen} onOpenChange={setPreviewOpen}>
+                    <CollapsibleTrigger asChild>
+                        <button
+                            type="button"
+                            className="w-full rounded-t-lg text-left outline-none transition-colors hover:bg-white/[0.02] focus-visible:ring-2 focus-visible:ring-yellow-500/40"
+                        >
+                            <CardHeader className="flex flex-row items-center gap-3 space-y-0 pb-4">
+                                <div className="min-w-0 flex-1 space-y-1">
+                                    <CardTitle className="text-xl">Homepage Preview (Live Broker Cards)</CardTitle>
+                                    <p className="text-sm font-normal text-muted-foreground">
+                                        See how cards render on the site — expand when you need a visual check.
+                                    </p>
+                                </div>
+                                <ChevronDownIcon
+                                    className={cn(
+                                        "h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-200",
+                                        previewOpen && "rotate-180",
+                                    )}
+                                    aria-hidden
+                                />
+                            </CardHeader>
+                        </button>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                <CardContent className="pt-0">
                     {sortedBrokers.length === 0 ? (
                         <p className="text-sm text-muted-foreground">
                             No brokers yet. Add a broker above and it will appear here exactly as on the homepage.
@@ -481,6 +606,8 @@ const BrokersPage = () => {
                     </div>
                     )}
                 </CardContent>
+                    </CollapsibleContent>
+                </Collapsible>
             </Card>
         </div>
     );

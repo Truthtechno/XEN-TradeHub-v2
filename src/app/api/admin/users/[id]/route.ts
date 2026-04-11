@@ -1,5 +1,6 @@
 import { ensureAdmin } from "@/lib/admin-route";
 import { db } from "@/lib/prisma";
+import { toPublicPortalUser } from "@/lib/portal-user-public";
 import { PortalRole } from "@prisma/client";
 import { NextResponse } from "next/server";
 
@@ -18,7 +19,7 @@ export async function PATCH(req: Request, { params }: Ctx) {
                 isActive: typeof body.isActive === "boolean" ? body.isActive : undefined,
             },
         });
-        return NextResponse.json(updated);
+        return NextResponse.json(toPublicPortalUser(updated));
     } catch {
         return NextResponse.json({ error: "Unable to update user." }, { status: 400 });
     }
