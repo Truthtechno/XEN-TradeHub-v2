@@ -40,7 +40,7 @@ const AdminShell = ({ children }: { children: ReactNode }) => {
         setMobileNavOpen(false);
         await fetch("/api/admin/logout", { method: "POST" });
         toast.success("Logged out successfully.");
-        router.push("/admin/login");
+        router.push("/");
         router.refresh();
     };
 

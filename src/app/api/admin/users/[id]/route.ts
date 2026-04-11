@@ -1,4 +1,5 @@
 import { ensureAdmin } from "@/lib/admin-route";
+import { isAssignablePortalRole } from "@/lib/portal-assignable-roles";
 import { db } from "@/lib/prisma";
 import { toPublicPortalUser } from "@/lib/portal-user-public";
 import { PortalRole } from "@prisma/client";
@@ -12,6 +13,9 @@ export async function PATCH(req: Request, { params }: Ctx) {
 
     try {
         const body = (await req.json()) as { role?: PortalRole; isActive?: boolean };
+        if (body.role !== undefined && !isAssignablePortalRole(body.role)) {
+            return NextResponse.json({ error: "Role must be User or Admin." }, { status: 400 });
+        }
         const updated = await db.portalUser.update({
             where: { id: params.id },
             data: {

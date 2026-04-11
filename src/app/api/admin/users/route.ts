@@ -1,4 +1,5 @@
 import { ensureAdmin } from "@/lib/admin-route";
+import { isAssignablePortalRole } from "@/lib/portal-assignable-roles";
 import { db } from "@/lib/prisma";
 import { generateTemporaryPassword, hashPortalPassword } from "@/lib/portal-password";
 import { toPublicPortalUser } from "@/lib/portal-user-public";
@@ -22,6 +23,9 @@ export async function POST(req: Request) {
         const fullName = body.fullName?.trim();
         const email = body.email?.trim().toLowerCase();
         const role = body.role || PortalRole.USER;
+        if (!isAssignablePortalRole(role)) {
+            return NextResponse.json({ error: "Role must be User or Admin." }, { status: 400 });
+        }
 
         if (!fullName || !email) {
             return NextResponse.json({ error: "Full name and email are required." }, { status: 400 });

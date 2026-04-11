@@ -2,6 +2,7 @@
 
 import { PortalRole } from "@/components/admin/types";
 import { useAdminOverview } from "@/components/admin/use-admin-overview";
+import { ASSIGNABLE_PORTAL_ROLE_OPTIONS } from "@/lib/portal-assignable-roles";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,6 +26,22 @@ type TempPasswordResponse = {
     temporaryPassword?: string;
     error?: string;
 };
+
+function PortalRoleSelectItems({ currentRole }: { currentRole?: PortalRole }) {
+    const legacy =
+        currentRole === "MANAGER" || currentRole === "ANALYST" ? currentRole : null;
+    return (
+        <>
+            {legacy === "MANAGER" ? <SelectItem value="MANAGER">Manager</SelectItem> : null}
+            {legacy === "ANALYST" ? <SelectItem value="ANALYST">Analyst</SelectItem> : null}
+            {ASSIGNABLE_PORTAL_ROLE_OPTIONS.map(({ value, label }) => (
+                <SelectItem key={value} value={value}>
+                    {label}
+                </SelectItem>
+            ))}
+        </>
+    );
+}
 
 const UsersPage = () => {
     const { data, loading, error, reload } = useAdminOverview();
@@ -184,10 +201,7 @@ const UsersPage = () => {
                                 <SelectValue placeholder="Role" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="USER">User</SelectItem>
-                                <SelectItem value="MANAGER">Manager</SelectItem>
-                                <SelectItem value="ANALYST">Analyst</SelectItem>
-                                <SelectItem value="ADMIN">Admin</SelectItem>
+                                <PortalRoleSelectItems />
                             </SelectContent>
                         </Select>
                         <Button type="submit" disabled={saving} className="min-h-10 w-full shrink-0 lg:w-auto">
@@ -257,10 +271,7 @@ const UsersPage = () => {
                                                         <SelectValue />
                                                     </SelectTrigger>
                                                     <SelectContent>
-                                                        <SelectItem value="USER">User</SelectItem>
-                                                        <SelectItem value="MANAGER">Manager</SelectItem>
-                                                        <SelectItem value="ANALYST">Analyst</SelectItem>
-                                                        <SelectItem value="ADMIN">Admin</SelectItem>
+                                                        <PortalRoleSelectItems currentRole={user.role} />
                                                     </SelectContent>
                                                 </Select>
                                             </div>
@@ -353,10 +364,7 @@ const UsersPage = () => {
                                                                 <SelectValue />
                                                             </SelectTrigger>
                                                             <SelectContent>
-                                                                <SelectItem value="USER">User</SelectItem>
-                                                                <SelectItem value="MANAGER">Manager</SelectItem>
-                                                                <SelectItem value="ANALYST">Analyst</SelectItem>
-                                                                <SelectItem value="ADMIN">Admin</SelectItem>
+                                                                <PortalRoleSelectItems currentRole={user.role} />
                                                             </SelectContent>
                                                         </Select>
                                                     </td>

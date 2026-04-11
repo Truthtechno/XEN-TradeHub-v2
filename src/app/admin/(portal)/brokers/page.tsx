@@ -38,8 +38,8 @@ const BrokersPage = () => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [dragBrokerId, setDragBrokerId] = useState<string | null>(null);
     const [addSectionOpen, setAddSectionOpen] = useState(false);
-    const [directoryOpen, setDirectoryOpen] = useState(true);
-    const [previewOpen, setPreviewOpen] = useState(false);
+    const [directoryOpen, setDirectoryOpen] = useState(false);
+    const [previewOpen, setPreviewOpen] = useState(true);
 
     const editingBroker = useMemo(
         () => data?.brokers.find((broker) => broker.id === editingId) || null,
@@ -253,7 +253,7 @@ const BrokersPage = () => {
                                         {editingBroker ? `Edit Broker: ${editingBroker.name}` : "Add New Broker"}
                                     </CardTitle>
                                     <p className="text-sm font-normal text-muted-foreground">
-                                        {editingBroker ? "Update details below, then save." : "Create a new homepage card — expand to use the form."}
+                                        {editingBroker ? "Update details below, then save." : "Create a new homepage card."}
                                     </p>
                                 </div>
                                 <ChevronDownIcon
@@ -501,9 +501,7 @@ const BrokersPage = () => {
                             <CardHeader className="flex flex-row items-center gap-3 space-y-0 pb-4">
                                 <div className="min-w-0 flex-1 space-y-1">
                                     <CardTitle className="text-xl">Homepage Preview (Live Broker Cards)</CardTitle>
-                                    <p className="text-sm font-normal text-muted-foreground">
-                                        See how cards render on the site — expand when you need a visual check.
-                                    </p>
+                                    <p className="text-sm font-normal text-muted-foreground">See how cards render on the site.</p>
                                 </div>
                                 <ChevronDownIcon
                                     className={cn(

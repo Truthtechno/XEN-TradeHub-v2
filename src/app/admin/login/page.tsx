@@ -49,13 +49,7 @@ const AdminLoginPage = () => {
     return (
         <main className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-10">
             <div className="relative mx-auto w-full max-w-md rounded-2xl border border-border/70 bg-background/90 p-6 shadow-xl backdrop-blur-md md:p-8">
-                <div className="mb-6">
-                    <h1 className="text-3xl font-semibold tracking-tight">Sign in</h1>
-                    <p className="mt-2 text-sm text-muted-foreground">
-                        Portal users sign in with the email and temporary password from an admin, then set a permanent password. The
-                        bootstrap admin account uses credentials from your server environment.
-                    </p>
-                </div>
+                <h1 className="mb-6 text-3xl font-semibold tracking-tight">Sign in</h1>
 
                 <form onSubmit={onSubmit} className="space-y-4">
                     <div className="space-y-2">

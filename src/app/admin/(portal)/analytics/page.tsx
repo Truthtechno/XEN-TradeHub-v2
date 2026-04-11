@@ -235,20 +235,22 @@ const AnalyticsPage = () => {
                 <CardHeader>
                     <CardTitle>Backend Login Audit Trail</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-2">
+                <CardContent>
                     {data.backendAccess.recentLogins.length ? (
-                        data.backendAccess.recentLogins.map((event) => (
-                            <div
-                                key={event.id}
-                                className="grid gap-2 rounded-md bg-white/[0.03] px-3 py-2 text-xs text-muted-foreground md:grid-cols-[1.2fr_1fr_0.7fr_0.7fr_1fr]"
-                            >
-                                <span className="truncate">{event.email}</span>
-                                <span>{new Date(event.createdAt).toLocaleString()}</span>
-                                <span className="capitalize">{event.deviceType || "unknown"}</span>
-                                <span>{event.country || "Unknown"}</span>
-                                <span className="truncate">{event.ipAddress || event.ipHash || "N/A"}</span>
-                            </div>
-                        ))
+                        <div className="max-h-[15rem] space-y-2 overflow-y-auto pr-1">
+                            {data.backendAccess.recentLogins.map((event) => (
+                                <div
+                                    key={event.id}
+                                    className="grid gap-2 rounded-md bg-white/[0.03] px-3 py-2 text-xs text-muted-foreground md:grid-cols-[1.2fr_1fr_0.7fr_0.7fr_1fr]"
+                                >
+                                    <span className="truncate">{event.email}</span>
+                                    <span>{new Date(event.createdAt).toLocaleString()}</span>
+                                    <span className="capitalize">{event.deviceType || "unknown"}</span>
+                                    <span>{event.country || "Unknown"}</span>
+                                    <span className="truncate">{event.ipAddress || event.ipHash || "N/A"}</span>
+                                </div>
+                            ))}
+                        </div>
                     ) : (
                         <p className="text-sm text-muted-foreground">No login events yet.</p>
                     )}
