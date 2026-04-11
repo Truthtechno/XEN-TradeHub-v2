@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import { Providers } from "@/components";
 import VisitTracker from "@/components/analytics/visit-tracker";
 import { Toaster } from "@/components/ui/sonner";
@@ -25,6 +26,7 @@ export default function RootLayout({
                     <VisitTracker />
                     {children}
                 </Providers>
+                <Analytics />
             </body>
         </html>
     );
